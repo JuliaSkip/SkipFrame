@@ -5,6 +5,7 @@
 //  Created by Скіп Юлія Ярославівна on 14.11.2025.
 //
 import UIKit
+import Photos
 
 /// `ButtonsManager` is a singleton class responsible for managing all UI buttons
 /// for drawing controls, including brush selection, color picking, undo/redo, sliders,
@@ -38,14 +39,14 @@ public final class ButtonsManager {
     public enum StackPosition {
         case top, bottom
     }
-        
+    
     // MARK: - Singleton
     
     /// Shared singleton instance.
     public static let shared = ButtonsManager()
-
+    
     // MARK: - Private properties
-
+    
     private weak var drawingView: DrawingView?
     private var backgroundImageView: UIImageView?
     private var parentViewController: UIViewController?
@@ -199,8 +200,28 @@ public final class ButtonsManager {
         }
     }
     
+    
+    /// Returns current drawing
+    public func getDrawing() -> UIImage? {
+        guard let drawingView = drawingView else { return nil }
+        
+        let size = drawingView.bounds.size
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        
+        let finalImage = renderer.image { _ in
+            backgroundImageView?.layer.render(in: UIGraphicsGetCurrentContext()!)
+            
+            drawingView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        }
+                
+        return finalImage
+    }
+    
     // MARK: - Private setup methods
-
+    
     /// Sets up the main buttons stack layout.
     private func setupButtonsStack(view: UIView){
         setupButtons()
@@ -413,7 +434,7 @@ public final class ButtonsManager {
     }
     
     // MARK: - Button actions
-
+    
     @objc private func toggleDrawMode() {
         guard let drawingView = drawingView else { return }
         
@@ -435,35 +456,25 @@ public final class ButtonsManager {
     }
     
     @objc private func saveTapped() {
-        guard let drawingView = drawingView else { return }
-        
-        let size = drawingView.bounds.size
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = UIScreen.main.scale
-        
-        let renderer = UIGraphicsImageRenderer(size: size, format: format)
-        
-        let finalImage = renderer.image { _ in
-            backgroundImageView?.layer.render(in: UIGraphicsGetCurrentContext()!)
+        if let image = getDrawing(){
             
-            drawingView.layer.render(in: UIGraphicsGetCurrentContext()!)
-        }
-        
-        UIImageWriteToSavedPhotosAlbum(finalImage, nil, nil, nil)
-        
-        let alert = UIAlertController(
-            title: "Saved",
-            message: "Your artwork has been saved to Photos.",
-            preferredStyle: .alert
-        )
-        
-        parentViewController?.present(alert, animated: true)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            alert.dismiss(animated: true)
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            
+            
+            let alert = UIAlertController(
+                title: "Saved",
+                message: "Your artwork has been saved to Photos.",
+                preferredStyle: .alert
+            )
+            
+            parentViewController?.present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                alert.dismiss(animated: true)
+            }
         }
     }
-    
+
     @objc private func colorTapped() {
         NotificationCenter.default.post(name: NSNotification.Name("openColorPicker"), object: nil)
     }

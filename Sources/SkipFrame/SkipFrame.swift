@@ -85,6 +85,11 @@ public final class SkipFrame: UIView {
         ButtonsManager.shared.changeButtonsStackPosition(to: position)
     }
     
+    /// Returns current drawing
+    public func getDrawing() -> UIImage? {
+        return ButtonsManager.shared.getDrawing()
+    }
+    
     // MARK: - Private methods
 
     /// Sets up the drawing layer over the frame.
