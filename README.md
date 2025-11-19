@@ -1,10 +1,3 @@
-//
-//  README.md
-//  SkipFrame
-//
-//  Created by Скіп Юлія Ярославівна on 19.11.2025.
-//
-
 # SkipFrame
 
 `SkipFrame` is a lightweight Swift framework for adding an interactive drawing overlay on top of any `UIViewController`. It allows drawing with different brush types, colors, opacity control, undo/redo, and saving artwork to Photos. The framework is fully open-source and supports both **Swift Package Manager (SPM)** and **CocoaPods** integration.
