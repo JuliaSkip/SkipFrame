@@ -14,15 +14,8 @@ import UIKit
 /// Example usage:
 /// ```swift
 /// let skipFrame = SkipFrame()
-/// skipFrame.translatesAutoresizingMaskIntoConstraints = false
+/// skipFrame.frame = view.bounds
 /// view.addSubview(skipFrame)
-///
-/// NSLayoutConstraint.activate([
-///     skipFrame.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-///     skipFrame.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-///     skipFrame.topAnchor.constraint(equalTo: view.topAnchor),
-///     skipFrame.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-/// ])
 /// skipFrame.setupFrame(for: self)
 /// skipFrame.setBackgroundColorForFrame(to: .red)
 /// skipFrame.changeButtonsStackPosition(to: .top)

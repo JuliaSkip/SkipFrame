@@ -89,7 +89,13 @@ skipFrame.reorderButtons([.color, .brushes, .save])
 skipFrame.changeButtonsStackPosition(to: .bottom)
 ```
 
+4. To enable saving images to the user’s photo library on iOS, the application must declare the appropriate usage-description key in Info.plist. Without this key, iOS will block write access to the photo library.
+
+Add the following entry:
+```xml
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>This app requires permission to save images to your photo library.</string>
+```
+
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Screenshots
