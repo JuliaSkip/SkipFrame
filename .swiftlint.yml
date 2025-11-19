@@ -1,0 +1,18 @@
+//
+//  .swiftlint.yml
+//  SkipFrame
+//
+//  Created by Скіп Юлія Ярославівна on 19.11.2025.
+//
+
+disabled_rules:
+  - line_length
+
+opt_in_rules:
+  - force_unwrapping
+
+included:
+  - Sources
+
+excluded:
+  - Tests
