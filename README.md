@@ -12,7 +12,6 @@
   - Square
   - Dotted
   - Arrow
-  - Eraser
 - Brush width and opacity sliders.
 - Undo/redo functionality.
 - Reset canvas feature.
