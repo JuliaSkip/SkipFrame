@@ -85,9 +85,16 @@ public final class SkipFrame: UIView {
         ButtonsManager.shared.changeButtonsStackPosition(to: position)
     }
     
-    /// Returns current drawing
+    /// Get current drawing
+    /// - Returns UIImage?
     public func getDrawing() -> UIImage? {
         return ButtonsManager.shared.getDrawing()
+    }
+    
+    /// Changes the color of the buttons
+    /// - Parameter color: UIColor
+    public func setTintColorForButtons(to color: UIColor){
+        ButtonsManager.shared.setTintColor(to: color)
     }
     
     // MARK: - Private methods

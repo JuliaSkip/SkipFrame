@@ -79,6 +79,9 @@ skipFrame.setBackgroundColorForFrame(to: .yellow)
 // Change button icons
 skipFrame.changeButtonIcon(for: .save, to: "square.and.arrow.down", colored: .red)
 
+// Change buttons color
+skipFrame.setTintColorForButtons(to: .white)
+
 // Reorder buttons
 skipFrame.reorderButtons([.color, .brushes, .sliders, .reset, .timer, .save])
 
@@ -87,6 +90,9 @@ skipFrame.reorderButtons([.color, .brushes, .save])
 
 // Move buttons stack to bottom
 skipFrame.changeButtonsStackPosition(to: .bottom)
+
+// Get current drawing
+let drawing = skipFrame.getDrawing()
 ```
 
 4. To enable saving images to the user’s photo library on iOS, the application must declare the appropriate usage-description key in Info.plist. Without this key, iOS will block write access to the photo library.

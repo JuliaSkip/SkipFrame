@@ -26,7 +26,7 @@ public final class ButtonsManager {
     /// Types of actions associated with buttons.
     public enum ActionType {
         case save, color, reset, undo, redo, brushes
-        case roundBrush, squareBrush, dottedBrush, arrowBrush, eraserBrush
+        case roundBrush, squareBrush, dottedBrush, arrowBrush
         case timeMode, brushSlider, opacitySlider
     }
     
@@ -64,6 +64,8 @@ public final class ButtonsManager {
     private let opacitySlider = UISlider()
     private var brushIconView: UIImageView?
     private var opacityIconView: UIImageView?
+    
+    private var buttonsTint: UIColor = .systemGray
     
     // MARK: - Public methods
     
@@ -114,7 +116,7 @@ public final class ButtonsManager {
         case .reset, .undo, .redo:
             updateMainActionMenuIcons(for: target, image: image)
             
-        case .roundBrush, .squareBrush, .dottedBrush, .arrowBrush, .eraserBrush:
+        case .roundBrush, .squareBrush, .dottedBrush, .arrowBrush:
             updateBrushMenuIcon(for: target, image: image)
             
         case .brushSlider:
@@ -220,6 +222,15 @@ public final class ButtonsManager {
         return finalImage
     }
     
+    /// Sets tintColor of the buttons  to parameter
+    /// - Parameter color: UIColor
+    public func setTintColor(to color: UIColor) {
+        self.buttonsTint = color
+        [buttonSave, buttonColor, buttonBrush, buttonToggleSliders, buttonActions, buttonModeToggle].forEach {
+            $0.tintColor = buttonsTint
+        }
+    }
+    
     // MARK: - Private setup methods
     
     /// Sets up the main buttons stack layout.
@@ -256,7 +267,7 @@ public final class ButtonsManager {
         buttonModeToggle.setImage(UIImage(systemName: "hourglass"), for: .normal)
         
         [buttonSave, buttonColor, buttonBrush, buttonToggleSliders, buttonActions, buttonModeToggle,].forEach {
-            $0.tintColor = .systemBlue
+            $0.tintColor = buttonsTint
         }
         
         setupBrushMenu()
@@ -288,11 +299,8 @@ public final class ButtonsManager {
             drawingView.brushType = .arrow
         }
         
-        let eraser = UIAction(title: "Eraser", image: UIImage(systemName: "eraser"), state: drawingView.brushType == .eraser ? .on : .off) { _ in
-            drawingView.brushType = .eraser
-        }
         
-        buttonBrush.menu = UIMenu(title: "Brushes", options: .singleSelection, children: [round, square, dotted, arrow, eraser])
+        buttonBrush.menu = UIMenu(title: "Brushes", options: .singleSelection, children: [round, square, dotted, arrow])
         buttonBrush.showsMenuAsPrimaryAction = true
     }
     
@@ -320,10 +328,6 @@ public final class ButtonsManager {
             case .arrowBrush where action.title == "Arrow":
                 return UIAction(title: action.title, image: image, state: state) { _ in
                     self.drawingView?.brushType = .arrow
-                }
-            case .eraserBrush where action.title == "Eraser":
-                return UIAction(title: action.title, image: image, state: state) { _ in
-                    self.drawingView?.brushType = .eraser
                 }
             default:
                 return action
@@ -388,7 +392,7 @@ public final class ButtonsManager {
         brushSlider.addTarget(self, action: #selector(brushSliderChanged(_:)), for: .valueChanged)
         
         let brushIcon = UIImageView(image: UIImage(systemName: "paintbrush"))
-        brushIcon.tintColor = .systemBlue
+        brushIcon.tintColor = buttonsTint
         brushIconView = brushIcon
         let brushStack = UIStackView(arrangedSubviews: [brushIcon, brushSlider])
         brushStack.axis = .horizontal
@@ -401,7 +405,7 @@ public final class ButtonsManager {
         opacitySlider.addTarget(self, action: #selector(opacitySliderChanged(_:)), for: .valueChanged)
         
         let opacityIcon = UIImageView(image: UIImage(systemName: "drop.fill"))
-        opacityIcon.tintColor = .systemBlue
+        opacityIcon.tintColor = buttonsTint
         opacityIconView = opacityIcon
         let opacityStack = UIStackView(arrangedSubviews: [opacityIcon, opacitySlider])
         opacityStack.axis = .horizontal

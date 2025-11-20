@@ -30,7 +30,7 @@ public final class DrawingView: UIView {
     // MARK: - Brush settings
     
     /// Type of brush used for drawing.
-    enum BrushType { case round, square, dotted, eraser, arrow }
+    enum BrushType { case round, square, dotted, arrow }
     var brushType: BrushType = .round
     
     /// Drawing mode for fade effects.
@@ -95,21 +95,33 @@ public final class DrawingView: UIView {
     
     /// Undoes the last drawing action.
     public func undo() {
-        guard let lastImage = undoStack.popLast() else { return }
+        guard let previous = undoStack.popLast() else { return }
+        
         if let current = mainImageView.image {
             redoStack.append(current)
+        } else {
+            redoStack.append(UIImage())
         }
-        mainImageView.image = lastImage
+        
+        mainImageView.image = previous
     }
+    
+    
     
     /// Redoes the last undone drawing action.
     public func redo() {
-        guard let nextImage = redoStack.popLast() else { return }
+        guard let next = redoStack.popLast() else { return }
+        
         if let current = mainImageView.image {
             undoStack.append(current)
+        } else {
+            undoStack.append(UIImage())
         }
-        mainImageView.image = nextImage
+        
+        mainImageView.image = next
     }
+    
+    
     
     // MARK: - Private setup methods
     
@@ -176,10 +188,6 @@ public final class DrawingView: UIView {
             context.setLineCap(.round)
             context.setLineDash(phase: 0, lengths: [1, 30])
             context.setStrokeColor(red: red, green: green, blue: blue, alpha: 1)
-        case .eraser:
-            context.setLineCap(.round)
-            context.setLineDash(phase: 0, lengths: [])
-            context.setStrokeColor(UIColor.systemBackground.cgColor)
         case .arrow:
             context.setLineCap(.round)
             context.setLineDash(phase: 0, lengths: [])
@@ -262,17 +270,23 @@ public final class DrawingView: UIView {
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         swiped = false
         if let touch = touches.first {
+            
             lastPoint = touch.location(in: self)
             if brushType == .arrow {
                 arrowStartPoint = lastPoint
             }
             
-            if let currentImage = mainImageView.image {
-                undoStack.append(currentImage)
+            if let current = mainImageView.image {
+                undoStack.append(current)
+            } else {
+                undoStack.append(UIImage())
             }
+            
+            redoStack.removeAll()
         }
     }
-
+    
+    
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         swiped = true
         if let touch = touches.first {

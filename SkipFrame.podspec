@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "SkipFrame"
-  spec.version      = "1.1.0"
+  spec.version      = "1.2.0"
   spec.summary      = "Custom interactive drawing frame with brushes, color picker, sliders and snapshot background."
 
   # This description is used to generate tags and improve search results.
