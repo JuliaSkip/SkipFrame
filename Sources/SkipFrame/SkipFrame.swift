@@ -97,6 +97,10 @@ public final class SkipFrame: UIView {
         ButtonsManager.shared.setTintColor(to: color)
     }
     
+    public func resetCanvas(){
+        drawingView.resetCanvas()
+    }
+    
     // MARK: - Private methods
 
     /// Sets up the drawing layer over the frame.
